@@ -4,8 +4,9 @@ import Header from '../../components/Header'
 import Sidebar from '../../components/Sidebar'
 import Login from '../../components/Login'
 import { getSession } from 'next-auth/react'
+import Feed from '../../components/Feed'
 
-export default function Home ( {session} )
+export default function Home ({ session })
 {
   if (!session) return <Login></Login>;
   return (
@@ -15,16 +16,21 @@ export default function Home ( {session} )
       </Head>
       <Header></Header>
       <main className="flex bg-gray-100">
-          <Sidebar></Sidebar>
+        {/* left */}
+        <Sidebar></Sidebar>
+        {/* feed */}
+        <Feed></Feed>
+        {/* right */}
       </main>
     </div>
-    
+
   )
 }
 
-export async function getServerSideProps(context){
+export async function getServerSideProps (context)
+{
   const session = await getSession(context)
   return {
-    props:{ session },
+    props: { session },
   }
 }
