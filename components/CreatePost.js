@@ -6,10 +6,13 @@ import { IoMdPhotos } from 'react-icons/io'
 import { BsEmojiSmile } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addPost } from '../public/src/features/postSlice';
 const CreatePost = () =>
 {
     const FACEBOOK_CLONE_ENDPOINT = ""
     const { data: session, status } = useSession();
+    const dispatch = useDispatch();
     const inputRef = useRef(null)
     const hiddenFileInput = useRef(null)
     const [imageToPost, setImageToPost] = useState(null)
@@ -51,10 +54,11 @@ const CreatePost = () =>
             headers:{Accept: "application/json"},
         }).then((response) => {
             inputRef.current.value = "";
+            dispatch(addPost(response.data))
             removeImage();
         }).catch((error)=>{
             console.log(error);
-        })
+        });
     }
     return (
         <div className='bg-white rounded-md shadow-md text-gray-500 p-2'>
