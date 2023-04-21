@@ -5,26 +5,56 @@ import { HiOutlineVideoCamera } from 'react-icons/hi';
 import { IoMdPhotos } from 'react-icons/io'
 import { BsEmojiSmile } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import axios from 'axios';
 const CreatePost = () =>
 {
+    const FACEBOOK_CLONE_ENDPOINT = ""
     const { data: session, status } = useSession();
     const inputRef = useRef(null)
     const hiddenFileInput = useRef(null)
     const [imageToPost, setImageToPost] = useState(null)
-    const handleClick = () =>{
+    const handleClick = () =>
+    {
         hiddenFileInput.current.click();
     };
-    const addImageToPost = (e) =>{
+    const addImageToPost = (e) =>
+    {
         const reader = new FileReader()
-        if(e.target.files[0]){
+        if (e.target.files[0])
+        {
             reader.readAsDataURL(e.target.files[0]);
-            reader.onload = (e) =>{
+            reader.onload = (e) =>
+            {
                 setImageToPost(e.target.result);
             }
         }
     };
-    const removeImage = () =>{
+
+    const removeImage = () =>
+    {
         setImageToPost(null);
+    }
+
+    const handleSubmit = (e) =>
+    {
+        e.preventDefault()
+        if(!inputRef.current.value) return;
+        const formData = new FormData()
+
+        formData.append('file', imageToPost)
+        formData.append('post', inputRef.current.value)
+        formData.append('name', session?.user.id)
+        formData.append('email', session?.user.email)
+        formData.append('profilePic', session?.user.image)
+
+        axios.post(FACEBOOK_CLONE_ENDPOINT, formData, {
+            headers:{Accept: "application/json"},
+        }).then((response) => {
+            inputRef.current.value = "";
+            removeImage();
+        }).catch((error)=>{
+            console.log(error);
+        })
     }
     return (
         <div className='bg-white rounded-md shadow-md text-gray-500 p-2'>
@@ -38,7 +68,7 @@ const CreatePost = () =>
                 <form className='flex flex-1'>
                     <input className='rounded-full h-12 flex-grow focus:outline-none font-medium bg-gray-100 px-4' type='text'
                         ref={inputRef} placeholder={`What's on your mind,${session?.user.name}?`}></input>
-                    <button hidden></button>
+                    <button hidden onClick={handleSubmit}></button>
                 </form>
             </div>
             {imageToPost && (
