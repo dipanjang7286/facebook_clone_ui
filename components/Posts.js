@@ -1,9 +1,36 @@
-import React from 'react'
+import React, { use, useEffect } from 'react'
 import Post from './Post'
+import { useDispatch, useSelector } from 'react-redux'
+import { addAllPost, selectPost } from '../public/src/features/postSlice';
+import axios from 'axios';
 
-const Posts = () => {
+const Posts = () =>
+{
+  const FACEBOOK_CLONE_ENDPOINT = "http://localhost:8080/api/v1/post";
+  useEffect(() =>
+  {
+    const fetchData = () =>
+    {
+      const response = axios
+        .get(FACEBOOK_CLONE_ENDPOINT)
+        .then((response) =>
+        {
+          // console.log(response.data);
+          dispatch(addAllPost(response.data));
+        });
+    };
+    fetchData();
+    // console.log(posts);
+  }, []);
+  const dispatch = useDispatch();
+  const posts = useSelector(selectPost);
+
   return (
-    <Post></Post>
+    <div>
+      {posts.map((post) => (
+        <Post post={post} key={post.id} />
+      ))}
+    </div>
   )
 }
 
