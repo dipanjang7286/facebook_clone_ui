@@ -46,7 +46,7 @@ const CreatePost = () =>
 
         formData.append('file', imageToPost)
         formData.append('post', inputRef.current.value)
-        formData.append('name', session?.user.id)
+        formData.append('name', session?.user.name)
         formData.append('email', session?.user.email)
         formData.append('profilePic', session?.user.image)
 
