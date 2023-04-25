@@ -39,3 +39,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Demo screenshot
 ![](Screenshot1.png)
+This is the login page.
+![](Screenshot2.png)
+This is the authentication page.
+![](Screenshot3.png)
+This is the landing page. By clicking the image/video button you can upload image and after hitting enter the image will uploaded.
+
